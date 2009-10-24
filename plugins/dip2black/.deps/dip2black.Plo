@@ -1,0 +1,495 @@
+dip2black.lo: dip2black.C dip2black.h ../../cinelerra/pluginvclient.h \
+  ../../cinelerra/maxbuffers.h ../../cinelerra/pluginclient.h \
+  ../../guicast/arraylist.h /usr/include/stdio.h /usr/include/features.h \
+  /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h \
+  /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h \
+  /usr/lib/gcc/i486-linux-gnu/4.3.3/include/stddef.h \
+  /usr/include/bits/types.h /usr/include/bits/typesizes.h \
+  /usr/include/libio.h /usr/include/_G_config.h /usr/include/wchar.h \
+  /usr/lib/gcc/i486-linux-gnu/4.3.3/include/stdarg.h \
+  /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h \
+  /usr/include/bits/stdio.h /usr/include/bits/stdio2.h \
+  /usr/include/stdlib.h /usr/include/bits/waitflags.h \
+  /usr/include/bits/waitstatus.h /usr/include/endian.h \
+  /usr/include/bits/endian.h /usr/include/bits/byteswap.h \
+  /usr/include/xlocale.h /usr/include/sys/types.h /usr/include/time.h \
+  /usr/include/sys/select.h /usr/include/bits/select.h \
+  /usr/include/bits/sigset.h /usr/include/bits/time.h \
+  /usr/include/sys/sysmacros.h /usr/include/bits/pthreadtypes.h \
+  /usr/include/alloca.h /usr/include/bits/stdlib.h \
+  ../../guicast/condition.h /usr/include/pthread.h /usr/include/sched.h \
+  /usr/include/bits/sched.h /usr/include/signal.h \
+  /usr/include/bits/setjmp.h ../../cinelerra/edlsession.inc \
+  ../../cinelerra/keyframe.h ../../cinelerra/auto.h \
+  ../../cinelerra/auto.inc ../../cinelerra/edl.inc \
+  ../../guicast/guicast.h ../../guicast/bcbar.h \
+  ../../guicast/bcsubwindow.h ../../guicast/arraylist.h \
+  ../../guicast/bcwindowbase.h ../../config.h ../../guicast/bcbar.inc \
+  ../../guicast/bcbitmap.inc ../../guicast/bcbutton.inc \
+  ../../guicast/bccapture.inc ../../guicast/bcclipboard.inc \
+  ../../guicast/bcdragwindow.inc ../../guicast/bcfilebox.inc \
+  ../../guicast/bclistbox.inc ../../guicast/bcmenubar.inc \
+  ../../guicast/bcmeter.inc ../../guicast/bcpan.inc \
+  ../../guicast/bcpbuffer.inc ../../guicast/bcpixmap.inc \
+  ../../guicast/bcpopup.inc ../../guicast/bcpopupmenu.inc \
+  ../../guicast/bcpot.inc ../../guicast/bcprogress.inc \
+  ../../guicast/bcrelocatablewidget.h ../../guicast/bcrepeater.inc \
+  ../../guicast/bcresources.inc ../../guicast/bcscrollbar.inc \
+  ../../guicast/bcslider.inc ../../guicast/bcsubwindow.inc \
+  ../../guicast/bcsynchronous.inc ../../guicast/bctextbox.inc \
+  ../../guicast/bctimer.inc ../../guicast/bctitle.inc \
+  ../../guicast/bctoggle.inc ../../guicast/bctumble.inc \
+  ../../guicast/bcwidgetgrid.inc ../../guicast/bcwindow.inc \
+  ../../guicast/bcwindowbase.inc ../../guicast/bcwindowevents.inc \
+  ../../guicast/condition.inc ../../guicast/bchash.inc \
+  ../../guicast/linklist.h ../../guicast/mutex.inc \
+  ../../guicast/vframe.inc /usr/include/stdint.h \
+  /usr/include/bits/wchar.h /usr/include/X11/Xatom.h \
+  /usr/include/X11/Xlib.h /usr/include/X11/X.h \
+  /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h \
+  /usr/include/X11/Xutil.h /usr/include/X11/keysym.h \
+  /usr/include/X11/keysymdef.h /usr/include/X11/cursorfont.h \
+  /usr/include/X11/extensions/xf86vmode.h /usr/include/X11/Xmd.h \
+  /usr/include/GL/glx.h /usr/include/GL/gl.h /usr/include/GL/glext.h \
+  /usr/include/GL/glxext.h ../../guicast/bcbitmap.h \
+  /usr/include/sys/ipc.h /usr/include/bits/ipctypes.h \
+  /usr/include/bits/ipc.h /usr/include/sys/shm.h /usr/include/bits/shm.h \
+  /usr/include/X11/extensions/XShm.h /usr/include/X11/extensions/Xvlib.h \
+  /usr/include/X11/extensions/Xv.h ../../guicast/colors.h \
+  ../../guicast/sizes.h ../../guicast/bcbutton.h \
+  ../../guicast/bcclipboard.h ../../guicast/thread.h \
+  ../../guicast/bcdragwindow.h ../../guicast/bcpopup.h \
+  ../../guicast/bclistboxitem.h ../../guicast/vframe.h \
+  ../../guicast/bctexture.inc ../../quicktime/colormodels.h \
+  ../../guicast/bcpan.h ../../guicast/rotateframe.inc \
+  ../../guicast/bcfilebox.h ../../guicast/bcdelete.inc \
+  ../../guicast/bclistboxitem.inc ../../guicast/bcnewfolder.inc \
+  ../../guicast/bctextbox.h ../../guicast/bclistbox.h \
+  ../../guicast/bcscrollbar.h ../../guicast/bctoggle.h \
+  ../../guicast/fonts.h ../../guicast/bctumble.h ../../guicast/bcwindow.h \
+  ../../guicast/filesystem.inc ../../guicast/bcmenu.h \
+  ../../guicast/bcmenuitem.inc ../../guicast/bcmenupopup.inc \
+  ../../guicast/bcmenubar.h ../../guicast/bcmenu.inc \
+  ../../guicast/bcmenuitem.h ../../guicast/bcmenupopup.h \
+  ../../guicast/bcmeter.h ../../guicast/units.h /usr/include/math.h \
+  /usr/include/bits/huge_val.h /usr/include/bits/huge_valf.h \
+  /usr/include/bits/huge_vall.h /usr/include/bits/inf.h \
+  /usr/include/bits/nan.h /usr/include/bits/mathdef.h \
+  /usr/include/bits/mathcalls.h /usr/include/bits/mathinline.h \
+  ../../guicast/bcpopupmenu.h ../../guicast/bcpot.h \
+  ../../guicast/bcpixmap.h ../../guicast/bcprogress.h \
+  ../../guicast/bcrecentlist.h ../../guicast/bcresources.h \
+  ../../guicast/bcdisplayinfo.inc ../../guicast/bcsignals.inc \
+  ../../guicast/bcslider.h ../../guicast/bcsynchronous.h \
+  ../../guicast/bctexture.h ../../guicast/bctheme.h \
+  ../../guicast/bctitle.h ../../guicast/bctimer.h /usr/include/sys/time.h \
+  ../../guicast/error.h ../../guicast/debug.h ../../cinelerra/filexml.inc \
+  ../../cinelerra/autos.inc ../../cinelerra/keyframes.inc \
+  ../../cinelerra/messages.inc ../../cinelerra/mainprogress.inc \
+  ../../cinelerra/plugincommands.h ../../cinelerra/pluginserver.inc \
+  ../../cinelerra/theme.inc ../../guicast/vframe.h \
+  ../../guicast/vframe.inc ../../cinelerra/edl.inc \
+  ../../cinelerra/overlayframe.h ../../cinelerra/loadbalance.h \
+  ../../guicast/condition.inc ../../guicast/mutex.inc \
+  ../../guicast/thread.h ../../cinelerra/overlayframe.inc \
+  ../../guicast/language.h /usr/include/libintl.h picon_png.h
+
+dip2black.h:
+
+../../cinelerra/pluginvclient.h:
+
+../../cinelerra/maxbuffers.h:
+
+../../cinelerra/pluginclient.h:
+
+../../guicast/arraylist.h:
+
+/usr/include/stdio.h:
+
+/usr/include/features.h:
+
+/usr/include/sys/cdefs.h:
+
+/usr/include/bits/wordsize.h:
+
+/usr/include/gnu/stubs.h:
+
+/usr/include/gnu/stubs-32.h:
+
+/usr/lib/gcc/i486-linux-gnu/4.3.3/include/stddef.h:
+
+/usr/include/bits/types.h:
+
+/usr/include/bits/typesizes.h:
+
+/usr/include/libio.h:
+
+/usr/include/_G_config.h:
+
+/usr/include/wchar.h:
+
+/usr/lib/gcc/i486-linux-gnu/4.3.3/include/stdarg.h:
+
+/usr/include/bits/stdio_lim.h:
+
+/usr/include/bits/sys_errlist.h:
+
+/usr/include/bits/stdio.h:
+
+/usr/include/bits/stdio2.h:
+
+/usr/include/stdlib.h:
+
+/usr/include/bits/waitflags.h:
+
+/usr/include/bits/waitstatus.h:
+
+/usr/include/endian.h:
+
+/usr/include/bits/endian.h:
+
+/usr/include/bits/byteswap.h:
+
+/usr/include/xlocale.h:
+
+/usr/include/sys/types.h:
+
+/usr/include/time.h:
+
+/usr/include/sys/select.h:
+
+/usr/include/bits/select.h:
+
+/usr/include/bits/sigset.h:
+
+/usr/include/bits/time.h:
+
+/usr/include/sys/sysmacros.h:
+
+/usr/include/bits/pthreadtypes.h:
+
+/usr/include/alloca.h:
+
+/usr/include/bits/stdlib.h:
+
+../../guicast/condition.h:
+
+/usr/include/pthread.h:
+
+/usr/include/sched.h:
+
+/usr/include/bits/sched.h:
+
+/usr/include/signal.h:
+
+/usr/include/bits/setjmp.h:
+
+../../cinelerra/edlsession.inc:
+
+../../cinelerra/keyframe.h:
+
+../../cinelerra/auto.h:
+
+../../cinelerra/auto.inc:
+
+../../cinelerra/edl.inc:
+
+../../guicast/guicast.h:
+
+../../guicast/bcbar.h:
+
+../../guicast/bcsubwindow.h:
+
+../../guicast/arraylist.h:
+
+../../guicast/bcwindowbase.h:
+
+../../config.h:
+
+../../guicast/bcbar.inc:
+
+../../guicast/bcbitmap.inc:
+
+../../guicast/bcbutton.inc:
+
+../../guicast/bccapture.inc:
+
+../../guicast/bcclipboard.inc:
+
+../../guicast/bcdragwindow.inc:
+
+../../guicast/bcfilebox.inc:
+
+../../guicast/bclistbox.inc:
+
+../../guicast/bcmenubar.inc:
+
+../../guicast/bcmeter.inc:
+
+../../guicast/bcpan.inc:
+
+../../guicast/bcpbuffer.inc:
+
+../../guicast/bcpixmap.inc:
+
+../../guicast/bcpopup.inc:
+
+../../guicast/bcpopupmenu.inc:
+
+../../guicast/bcpot.inc:
+
+../../guicast/bcprogress.inc:
+
+../../guicast/bcrelocatablewidget.h:
+
+../../guicast/bcrepeater.inc:
+
+../../guicast/bcresources.inc:
+
+../../guicast/bcscrollbar.inc:
+
+../../guicast/bcslider.inc:
+
+../../guicast/bcsubwindow.inc:
+
+../../guicast/bcsynchronous.inc:
+
+../../guicast/bctextbox.inc:
+
+../../guicast/bctimer.inc:
+
+../../guicast/bctitle.inc:
+
+../../guicast/bctoggle.inc:
+
+../../guicast/bctumble.inc:
+
+../../guicast/bcwidgetgrid.inc:
+
+../../guicast/bcwindow.inc:
+
+../../guicast/bcwindowbase.inc:
+
+../../guicast/bcwindowevents.inc:
+
+../../guicast/condition.inc:
+
+../../guicast/bchash.inc:
+
+../../guicast/linklist.h:
+
+../../guicast/mutex.inc:
+
+../../guicast/vframe.inc:
+
+/usr/include/stdint.h:
+
+/usr/include/bits/wchar.h:
+
+/usr/include/X11/Xatom.h:
+
+/usr/include/X11/Xlib.h:
+
+/usr/include/X11/X.h:
+
+/usr/include/X11/Xfuncproto.h:
+
+/usr/include/X11/Xosdefs.h:
+
+/usr/include/X11/Xutil.h:
+
+/usr/include/X11/keysym.h:
+
+/usr/include/X11/keysymdef.h:
+
+/usr/include/X11/cursorfont.h:
+
+/usr/include/X11/extensions/xf86vmode.h:
+
+/usr/include/X11/Xmd.h:
+
+/usr/include/GL/glx.h:
+
+/usr/include/GL/gl.h:
+
+/usr/include/GL/glext.h:
+
+/usr/include/GL/glxext.h:
+
+../../guicast/bcbitmap.h:
+
+/usr/include/sys/ipc.h:
+
+/usr/include/bits/ipctypes.h:
+
+/usr/include/bits/ipc.h:
+
+/usr/include/sys/shm.h:
+
+/usr/include/bits/shm.h:
+
+/usr/include/X11/extensions/XShm.h:
+
+/usr/include/X11/extensions/Xvlib.h:
+
+/usr/include/X11/extensions/Xv.h:
+
+../../guicast/colors.h:
+
+../../guicast/sizes.h:
+
+../../guicast/bcbutton.h:
+
+../../guicast/bcclipboard.h:
+
+../../guicast/thread.h:
+
+../../guicast/bcdragwindow.h:
+
+../../guicast/bcpopup.h:
+
+../../guicast/bclistboxitem.h:
+
+../../guicast/vframe.h:
+
+../../guicast/bctexture.inc:
+
+../../quicktime/colormodels.h:
+
+../../guicast/bcpan.h:
+
+../../guicast/rotateframe.inc:
+
+../../guicast/bcfilebox.h:
+
+../../guicast/bcdelete.inc:
+
+../../guicast/bclistboxitem.inc:
+
+../../guicast/bcnewfolder.inc:
+
+../../guicast/bctextbox.h:
+
+../../guicast/bclistbox.h:
+
+../../guicast/bcscrollbar.h:
+
+../../guicast/bctoggle.h:
+
+../../guicast/fonts.h:
+
+../../guicast/bctumble.h:
+
+../../guicast/bcwindow.h:
+
+../../guicast/filesystem.inc:
+
+../../guicast/bcmenu.h:
+
+../../guicast/bcmenuitem.inc:
+
+../../guicast/bcmenupopup.inc:
+
+../../guicast/bcmenubar.h:
+
+../../guicast/bcmenu.inc:
+
+../../guicast/bcmenuitem.h:
+
+../../guicast/bcmenupopup.h:
+
+../../guicast/bcmeter.h:
+
+../../guicast/units.h:
+
+/usr/include/math.h:
+
+/usr/include/bits/huge_val.h:
+
+/usr/include/bits/huge_valf.h:
+
+/usr/include/bits/huge_vall.h:
+
+/usr/include/bits/inf.h:
+
+/usr/include/bits/nan.h:
+
+/usr/include/bits/mathdef.h:
+
+/usr/include/bits/mathcalls.h:
+
+/usr/include/bits/mathinline.h:
+
+../../guicast/bcpopupmenu.h:
+
+../../guicast/bcpot.h:
+
+../../guicast/bcpixmap.h:
+
+../../guicast/bcprogress.h:
+
+../../guicast/bcrecentlist.h:
+
+../../guicast/bcresources.h:
+
+../../guicast/bcdisplayinfo.inc:
+
+../../guicast/bcsignals.inc:
+
+../../guicast/bcslider.h:
+
+../../guicast/bcsynchronous.h:
+
+../../guicast/bctexture.h:
+
+../../guicast/bctheme.h:
+
+../../guicast/bctitle.h:
+
+../../guicast/bctimer.h:
+
+/usr/include/sys/time.h:
+
+../../guicast/error.h:
+
+../../guicast/debug.h:
+
+../../cinelerra/filexml.inc:
+
+../../cinelerra/autos.inc:
+
+../../cinelerra/keyframes.inc:
+
+../../cinelerra/messages.inc:
+
+../../cinelerra/mainprogress.inc:
+
+../../cinelerra/plugincommands.h:
+
+../../cinelerra/pluginserver.inc:
+
+../../cinelerra/theme.inc:
+
+../../guicast/vframe.h:
+
+../../guicast/vframe.inc:
+
+../../cinelerra/edl.inc:
+
+../../cinelerra/overlayframe.h:
+
+../../cinelerra/loadbalance.h:
+
+../../guicast/condition.inc:
+
+../../guicast/mutex.inc:
+
+../../guicast/thread.h:
+
+../../cinelerra/overlayframe.inc:
+
+../../guicast/language.h:
+
+/usr/include/libintl.h:
+
+picon_png.h:
