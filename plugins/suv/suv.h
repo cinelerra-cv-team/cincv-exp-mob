@@ -19,8 +19,8 @@
  * 
  */
 
-#ifndef DEFAULTTHEME_H
-#define DEFAULTTHEME_H
+#ifndef DEFAULTsuv_H
+#define DEFAULTsuv_H
 
 #include "new.inc"
 #include "plugintclient.h"

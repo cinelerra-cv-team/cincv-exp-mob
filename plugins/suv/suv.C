@@ -101,14 +101,14 @@ void SUV::initialize()
 
 
 	resources->text_default = 0xbfbfbf;
-	resources->text_background = 0x373737;
+	resources->text_background = 0x333333;
 	resources->text_border1 = 0x202020;
-	resources->text_border2 = 0x373737;
-	resources->text_border3 = 0x373737;
+	resources->text_border2 = 0x333333;
+	resources->text_border3 = 0x333333;
 	resources->text_border4 = 0x969696;
 	resources->text_inactive_highlight = 0x707070;
 
-	resources->bg_color = 0x484848;
+	resources->bg_color = 0x4d4d4d;
 	resources->default_text_color = 0xbfbfbf;
 	resources->menu_title_text = 0xbfbfbf;
 	resources->popup_title_text = 0xbfbfbf;
@@ -133,11 +133,11 @@ void SUV::initialize()
 	resources->listbox_title_margin = 20;
 	resources->listbox_title_hotspot = 20;
 	resources->listbox_border1 = 0x1a1a1a;
-	resources->listbox_border2 = 0x373737;
-	resources->listbox_border3 = 0x373737;
+	resources->listbox_border2 = 0x333333;
+	resources->listbox_border3 = 0x333333;
 	resources->listbox_border4 = 0x646464;
 	resources->listbox_highlighted = 0x505050;
-	resources->listbox_inactive = 0x373737;
+	resources->listbox_inactive = 0x333333;
 	resources->listbox_bg = 0;
 	resources->listbox_text = 0xbfbfbf;
 
@@ -643,9 +643,6 @@ void SUV::initialize()
 
 	channel_position_color = MEYELLOW;
 	resources->meter_title_w = 25;
-	
-        // (asset) edit info text color
-        edit_font_color = YELLOW;
 }
 
 #define CWINDOW_METER_MARGIN 5
@@ -1008,7 +1005,7 @@ void SUV::draw_mwindow_bg(MWindowGUI *gui)
 		get_image("timebar_bg"));
 
 // Zoombar
-	gui->set_color(0x373737);
+	gui->set_color(0x333333);
 	gui->draw_box(mzoom_x, 
 		mzoom_y,
 		mwindow->session->mwindow_w,
