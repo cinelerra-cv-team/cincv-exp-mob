@@ -346,8 +346,8 @@ public:
 	int save_defaults();
 	VFrame* new_picon();
 
-
-
+	FT_ULong * xchar;
+        void convert_text();
 	void build_fonts();
 	void draw_glyphs();
 	int draw_mask();

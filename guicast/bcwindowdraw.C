@@ -230,7 +230,11 @@ void BC_WindowBase::draw_text(int x,
 #endif
 						if(get_resources()->use_fontset && top_level->get_curr_fontset())
 						{
-        					XmbDrawString(top_level->display, 
+#if X_HAVE_UTF8_STRING
+        					Xutf8DrawString(top_level->display,
+#else 
+        					XmbDrawString(top_level->display,
+#endif
                 				pixmap ? pixmap->opaque_pixmap : this->pixmap->opaque_pixmap, 
                 				top_level->get_curr_fontset(),
                 				top_level->gc, 
@@ -302,15 +306,19 @@ void BC_WindowBase::draw_xft_text(int x,
 // top_level->get_xft_struct(top_level->current_font),
 // x2 + k, 
 // y2 + k,
-// (FcChar8*)&text[j],
+// (const XftChar8 *)&text[j],
 // i - j);
+#ifdef X_HAVE_UTF8_STRING
+	XftDrawStringUtf8 (
+#else
 	XftDrawString8 (
+#endif
 		(XftDraw*)(pixmap ? pixmap->opaque_xft_draw : this->pixmap->opaque_xft_draw),
 		&xft_color,
 		top_level->get_xft_struct(top_level->current_font),
 		x2 + k, 
 		y2 + k,
-		(FcChar8*)&text[j],
+		(const XftChar8 *)&text[j],
 		i - j);
 	XftColorFree(top_level->display,
 	    top_level->vis,

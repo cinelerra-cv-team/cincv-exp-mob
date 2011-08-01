@@ -679,22 +679,41 @@ int BC_TextBox::repeat_event(int64_t duration)
 
 void BC_TextBox::default_keypress(int &dispatch_event, int &result)
 {
-    if((top_level->get_keypress() == RETURN) ||
-//		(top_level->get_keypress() > 30 && top_level->get_keypress() < 127))
-		(top_level->get_keypress() > 30 && top_level->get_keypress() <= 255))
-	{
+// this continue the draft routine on bcwindow that send Uft8 //akirad
+if (top_level->get_keypress_1() > 0)
+				{
+				temp_string[0] = top_level->get_keypress_0();
+				temp_string[1] = top_level->get_keypress_1();
+				temp_string[2] = top_level->get_keypress_2();
+				temp_string[3] = top_level->get_keypress_3();
+			        } else {
+			        temp_string[0] = 0;
+			        temp_string[1] = 0;
+				temp_string[2] = 0;
+				temp_string[3] = 0;
+				if((top_level->get_keypress() == RETURN) || (top_level->get_keypress() > 30))
+					{
 // Substitute UNIX linefeed
-		if(top_level->get_keypress() == RETURN) 
+ //|| (top_level->get_keypress_1())) 
+		if(top_level->get_keypress() == RETURN)
+			{
 			temp_string[0] = 0xa;
-		else
+			}
+			else
+			{ 
 			temp_string[0] = top_level->get_keypress();
-		temp_string[1] = 0;
+			}
+			//temp_string[1] = 0;
+			
+				}
+	        	}	        
+	       // printf("code (%x %x %x %x) string %s \n", temp_string[0], temp_string[1], temp_string[2], temp_string[3], temp_string);
 		insert_text(temp_string);
 		find_ibeam(1);
 		draw();
 		dispatch_event = 1;
 		result = 1;
-	}
+	
 }
 
 int BC_TextBox::select_whole_text(int select)
@@ -737,8 +756,30 @@ int BC_TextBox::keypress_event()
 	if(!active || !enabled) return 0;
 
 	text_len = strlen(text);
+	/*char testpress[3];
+	printf("char1 %x\n", get_keypress());
+	if (get_keypress_1_true()) 
+		{ 
+		printf("var1 %x\n", get_keypress_1());
+		testpress[0] = get_keypress();
+		testpress[1] = get_keypress_1();
+		testpress[2] = 0;
+		} else {
+		testpress[0] = get_keypress();
+		testpress[1] = 0;
+		}
+	if (get_keypress_2_true()) 
+		{
+		printf("var2 %x\n", get_keypress_2());
+		testpress[2] = get_keypress_1();
+		testpress[3] = 0;
+		}
+		printf("try to print %s \n", testpress);
+	
+	last_keypress = testpress;*/
 	last_keypress = get_keypress();
 	switch(get_keypress())
+	//switch(testpress)
 	{
 		case ESC:
 			top_level->deactivate();

@@ -246,9 +246,9 @@ int BC_WindowBase::initialize()
 #ifdef HAVE_LIBXXF86VM
     vm_switched = 0;
 #endif
-	largefont_xft = 0;
-	mediumfont_xft = 0;
-	smallfont_xft = 0;
+//	largefont_xft = 0;
+//	mediumfont_xft = 0;
+//	smallfont_xft = 0;
 // Need these right away since put_event is called before run_window sometimes.
 	event_lock = new Mutex("BC_WindowBase::event_lock");
 	event_condition = new Condition(0, "BC_WindowBase::event_condition");
@@ -669,7 +669,7 @@ int BC_WindowBase::dispatch_event()
 	XEvent *event = 0;
     Window tempwin;
   	KeySym keysym;
-  	char keys_return[2];
+  	char keys_return[4];
 	int result;
 	XClientMessageEvent *ptr;
 	int temp;
@@ -878,9 +878,63 @@ int BC_WindowBase::dispatch_event()
 
 		case KeyPress:
 			get_key_masks(event);
-  			keys_return[0] = 0;
-  			XLookupString((XKeyEvent*)event, keys_return, 1, &keysym, 0);
+  			keys_return[0] = 0; 
+  			keys_return[1] = 0;
+  			keys_return[2] = 0;
+  			keys_return[3] = 0; 			
+#ifdef X_HAVE_UTF8_STRING  
+// this is routine is adapted from xev.c - xutils
+		im = XOpenIM (display, NULL, NULL, NULL);
+		XIMStyles *xim_styles;
+   	        XIMStyle xim_style;
+   	        if (im == NULL) {
+       			printf ("XOpenIM failed\n");
+    			}
+		if (im) {
+			char *imvalret;
+        		imvalret = XGetIMValues (im, XNQueryInputStyle, &xim_styles, NULL);
+        			if (imvalret != NULL || xim_styles == NULL) {
+            			printf ("input method doesn't support any styles\n");
+        		}
 
+    	       if (xim_styles) {
+            	               xim_style = 0;
+            	               
+            		       for (int z = 0;  z < xim_styles->count_styles;  z++) {
+                	       if (xim_styles->supported_styles[z] == (XIMPreeditNothing | XIMStatusNothing)) {
+                    			xim_style = xim_styles->supported_styles[z];
+                    	 	break;
+                		}
+            		}
+
+            	if (xim_style == 0) {
+                printf ("input method doesn't support the style we support\n");
+            	}
+            	XFree (xim_styles);
+        	}
+    		} 
+		if (im && xim_style) {
+        ic = XCreateIC (im, 
+                         XNInputStyle, xim_style, 
+                         XNClientWindow, win, 
+                         XNFocusWindow, win, 
+                         NULL);
+
+        if (ic == NULL) {
+            printf ("XCreateIC failed\n");
+        }
+    }
+    			if (ic) 
+    			{
+  			Xutf8LookupString(ic, (XKeyEvent*)event, keys_return, 6, &keysym, 0);
+  			} else {
+  			XLookupString((XKeyEvent*)event, keys_return, 6, &keysym, 0);
+  			}
+  			//KeyCode keycode;
+    			//keycode = XKeysymToKeycode(display, keysym);
+#else
+			XLookupString((XKeyEvent*)event, keys_return, 6, &keysym, 0);
+#endif
 // printf("BC_WindowBase::dispatch_event 2 %llx\n", 
 // event->xkey.state);
 // block out control keys
@@ -944,9 +998,16 @@ int BC_WindowBase::dispatch_event()
 				case XK_KP_Insert:      key_pressed = KPINS;     break;
 				case XK_KP_Decimal:
 				case XK_KP_Delete:      key_pressed = KPDEL;     break;
- 	    		default:           
-					//key_pressed = keys_return[0]; 
+ 	    		default:        
+#ifdef X_HAVE_UTF8_STRING
+					// Unclean and very very draft but the idea to send separate utf8 and keysym to bctext
+ 	 				key_pressed_0 = keys_return[0];
+					key_pressed_1 = keys_return[1]; 
+					key_pressed_2 = keys_return[2];
+					key_pressed_3 = keys_return[3];			
+#endif					
 					key_pressed = keysym & 0xff;
+					//printf("keysym: %x keys_return0: %x\n", keysym, keys_return[0]);
 					break;
 			}
 
@@ -1856,51 +1917,42 @@ int BC_WindowBase::init_fonts()
 void BC_WindowBase::init_xft()
 {
 #ifdef HAVE_XFT
-	if(!(largefont_xft = XftFontOpenXlfd(display,
+// double check of fonts causes slow gui, 
+// Xft already check if fonts exists, else use default
+// Rewrite to be fonts chooser ready //akirad
+	if(resources.large_font_xft[0] == '-')
+	    {
+	      largefont_xft = XftFontOpenXlfd(display,
 		screen,
-		resources.large_font_xft)))
-		if(!(largefont_xft = XftFontOpenXlfd(display,
-			screen,
-			resources.large_font_xft2)))
-			largefont_xft = XftFontOpenXlfd(display,
-		    	screen,
-		    	"fixed");
+		resources.large_font_xft);
+	    } else { 
+	      largefont_xft = XftFontOpenName(display,
+		screen,
+		resources.large_font_xft);
+		}
 
+	if(resources.medium_font_xft[0] == '-')
+	    {
+	      mediumfont_xft = XftFontOpenXlfd(display,
+		screen,
+		resources.medium_font_xft);
+	    } else { 
+	      mediumfont_xft = XftFontOpenName(display,
+		screen,
+		resources.medium_font_xft);
+		}
 
-	if(!(mediumfont_xft = XftFontOpenXlfd(display,
-		  screen,
-		  resources.medium_font_xft)))
-		if(!(mediumfont_xft = XftFontOpenXlfd(display,
-			  screen,
-			  resources.medium_font_xft2)))
-			mediumfont_xft = XftFontOpenXlfd(display,
-		    	screen,
-		    	"fixed");
+	if(resources.small_font_xft[0] == '-')
+	    {
+	      smallfont_xft = XftFontOpenXlfd(display,
+		screen,
+		resources.small_font_xft);
+	    } else { 
+	      smallfont_xft = XftFontOpenName(display,
+		screen,
+		resources.small_font_xft);
+		}
 
-
-	if(!(smallfont_xft = XftFontOpenXlfd(display,
-	      screen,
-	      resources.small_font_xft)))
-		if(!(smallfont_xft = XftFontOpenXlfd(display,
-	    	  screen,
-	    	  resources.small_font_xft2)))
-			  smallfont_xft = XftFontOpenXlfd(display,
-		    	  screen,
-		    	  "fixed");
-
-
-// Extension failed to locate fonts
-	if(!largefont_xft || !mediumfont_xft || !smallfont_xft)
-	{
-		printf("BC_WindowBase::init_fonts: no xft fonts found %s=%p %s=%p %s=%p\n",
-			resources.large_font_xft,
-			largefont_xft,
-			resources.medium_font_xft,
-			mediumfont_xft,
-			resources.small_font_xft,
-			smallfont_xft);
-		get_resources()->use_xft = 0;
-	}
 #endif
 }
 
@@ -2275,9 +2327,13 @@ int BC_WindowBase::get_single_text_width(int font, char *text, int length)
 	if(get_resources()->use_xft && get_xft_struct(font))
 	{
 		XGlyphInfo extents;
+#ifdef X_HAVE_UTF8_STRING
+		XftTextExtentsUtf8(top_level->display,
+#else
 		XftTextExtents8(top_level->display,
+#endif
 			get_xft_struct(font),
-			(FcChar8*)text, 
+			(const XftChar8 *)text, 
 			length,
 			&extents);
 		return extents.xOff;
@@ -2340,9 +2396,13 @@ int BC_WindowBase::get_text_ascent(int font)
 	if(get_resources()->use_xft && get_xft_struct(font))
 	{
 		XGlyphInfo extents;
+#ifdef X_HAVE_UTF8_STRING
+		XftTextExtentsUtf8(top_level->display,
+#else
 		XftTextExtents8(top_level->display,
+#endif
 			get_xft_struct(font),
-			(FcChar8*)"O", 
+			(const XftChar8 *)"O", 
 			1,
 			&extents);
 		return extents.y + 2;
@@ -2377,9 +2437,13 @@ int BC_WindowBase::get_text_descent(int font)
 	if(get_resources()->use_xft && get_xft_struct(font))
 	{
 		XGlyphInfo extents;
+#ifdef X_HAVE_UTF8_STRING
+		XftTextExtentsUtf8(top_level->display,
+#else
 		XftTextExtents8(top_level->display,
+#endif
 			get_xft_struct(font),
-			(FcChar8*)"j", 
+			(const XftChar8 *)"j", 
 			1,
 			&extents);
 		return extents.height - extents.y;
@@ -3167,6 +3231,24 @@ int BC_WindowBase::get_keypress()
 {
 	return top_level->key_pressed;
 }
+#ifdef X_HAVE_UTF8_STRING
+unsigned char BC_WindowBase::get_keypress_0()
+{
+	return top_level->key_pressed_0;
+}
+unsigned char BC_WindowBase::get_keypress_1()
+{
+	return top_level->key_pressed_1;
+}
+unsigned char BC_WindowBase::get_keypress_2()
+{
+	return top_level->key_pressed_2;
+}
+unsigned char BC_WindowBase::get_keypress_3()
+{
+	return top_level->key_pressed_3;
+}
+#endif
 
 int BC_WindowBase::get_double_click()
 {

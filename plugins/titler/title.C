@@ -60,8 +60,11 @@
 
 
 REGISTER_PLUGIN(TitleMain)
-
-
+#ifdef X_HAVE_UTF8_STRING
+// I needs a memory zone for all class, dirty but works// akirad
+int tlen = 0;
+FT_ULong * xchar;
+#endif
 TitleConfig::TitleConfig()
 {
 	style = 0;
@@ -608,6 +611,7 @@ void TitleUnit::process_package(LoadPackage *package)
 		{
 			TitleGlyph *glyph = plugin->glyphs.values[i];
 			if(glyph->c == pkg->c)
+			//if(true)
 			{
 				draw_glyph(plugin->text_mask, glyph, pkg->x, pkg->y);
 				if(plugin->config.stroke_width >= ZERO &&
@@ -645,7 +649,11 @@ void TitleEngine::init_packages()
 //printf("TitleEngine::init_packages 1\n");
 		pkg->y = char_position->y - visible_y1;
 //printf("TitleEngine::init_packages 1\n");
+#ifdef X_HAVE_UTF8_STRING
+		pkg->c = plugin->xchar[i];
+#else
 		pkg->c = plugin->config.text[i];
+#endif
 //printf("TitleEngine::init_packages 2\n");
 		current_package++;
 	}
@@ -1491,11 +1499,68 @@ int TitleMain::get_char_advance(int current, int next)
 
 	return result + (kerning.x >> 6);
 }
-
-
+#ifdef X_HAVE_UTF8_STRING 
+// this is a little routine that converts 8 bit string to FT_ULong array // akirad
+void TitleMain::convert_text()
+{
+	int text_len = strlen(config.text);
+	int total_packages = 0;
+	tlen = 0;
+	for(int i = 0; i < text_len; i++)
+		{
+		tlen++;
+		int x = 1;  
+		int z = (unsigned char)config.text[i];
+		if ( z > 0x80 && z != 0xa )
+		    {
+		    while ((unsigned char)config.text[i + x] > 0x80 && (unsigned char)config.text[i + x] < 0xBF ) x++;
+	            i += (x - 1);
+		    }
+		}
+	xchar = new FT_ULong [tlen + 1];
+	FcChar32 exchar;
+	int count = 0;
+	for(int i = 0; i < text_len; i++)
+		{
+		int x = 1;  
+		int z = (unsigned char)config.text[i];
+		FcChar8 prechar[5];
+		if ( z > 0x80 && z != 0xa )
+		    {
+		    prechar[0] = config.text[i];
+		  while ((unsigned char)config.text[i + x] > 0x80 && (unsigned char)config.text[i + x] < 0xBF )
+			  {
+			  prechar[x] = config.text[i + x];
+			  x++;
+			  }
+			prechar[x] = 0;
+			i += (x - 1);
+		     } else {
+		     prechar[0] = z;
+		     prechar[1] = 0;
+		     }
+		     FcUtf8ToUcs4 (prechar, &exchar, 4);
+		     xchar[count] = (FT_ULong)exchar;
+		     //printf("\ntpak: %i textlen: %i excharcount: %llx\n", tlen, text_len, xchar[count]);
+		     count++;
+		     //delete prechar;
+		}
+}
+#endif
 void TitleMain::draw_glyphs()
 {
 // Build table of all glyphs needed
+#ifdef X_HAVE_UTF8_STRING
+	int total_packages = 0;
+	// now convert text to FT_Ulong array
+	convert_text();
+	for(int i = 0; i < tlen; i++)
+	{
+		FT_ULong char_code;	
+		int c = xchar[i];
+		int exists = 0;
+		char_code = xchar[i];
+#else
 	int text_len = strlen(config.text);
 	int total_packages = 0;
 	iconv_t cd;
@@ -1524,14 +1589,17 @@ void TitleMain::draw_glyphs()
 			outbytes = 4;
 	
 			iconv (cd, &inp, &inbytes, &outp, &outbytes);
-#if     __BYTE_ORDER == __LITTLE_ENDIAN
+#endif
+#ifdef X_HAVE_UTF8_STRING 
+#elif     __BYTE_ORDER == __LITTLE_ENDIAN
+	
 				char_code = bswap_32(char_code);
 #endif                          /* Big endian.  */
-
+#ifndef X_HAVE_UTF8_STRING
 		} else {
 			char_code = c;
 		}
-
+#endif
 		for(int j = 0; j < glyphs.total; j++)
 		{
 			if(glyphs.values[j]->char_code == char_code)
@@ -1552,7 +1620,10 @@ void TitleMain::draw_glyphs()
 			glyph->char_code = char_code;
 		}
 	}
+#ifndef X_HAVE_UTF8_STRING
 	iconv_close(cd);
+#endif
+
 
 	if(!glyph_engine)
 		glyph_engine = new GlyphEngine(this, PluginClient::smp + 1);
@@ -1568,7 +1639,12 @@ void TitleMain::get_total_extents()
 // Determine extents of total text
 	int current_w = 0;
 	int row_start = 0;
+#ifdef X_HAVE_UTF8_STRING
+	text_len = tlen;
+#else
 	text_len = strlen(config.text);
+	const char xchar = config.text;
+#endif
 	if(!char_positions) char_positions = new title_char_position_t[text_len];
 	text_rows = 0;
 	text_w = 0;
@@ -1581,7 +1657,7 @@ void TitleMain::get_total_extents()
 	// get the number of rows first
 	for(int i = 0; i < text_len; i++)
 	{
-		if(config.text[i] == 0xa || i == text_len - 1)
+		if(xchar[i] == 0xa || i == text_len - 1)
 		{
 			text_rows++;
 		}
@@ -1594,11 +1670,11 @@ void TitleMain::get_total_extents()
 	{
 		char_positions[i].x = current_w;
 		char_positions[i].y = text_rows * get_char_height();
-		char_positions[i].w = get_char_advance(config.text[i], config.text[i + 1]);
+		char_positions[i].w = get_char_advance(xchar[i], xchar[i + 1]);
 		TitleGlyph *current_glyph = 0;
 		for(int j = 0; j < glyphs.total; j++)
 		{
-			if(glyphs.values[j]->c == config.text[i])
+			if(glyphs.values[j]->c == xchar[i])
 			{
 				current_glyph = glyphs.values[j];
 				break;
@@ -1609,13 +1685,13 @@ void TitleMain::get_total_extents()
 			rows_bottom[text_rows] = current_bottom ;
 
 // printf("TitleMain::get_total_extents 1 %c %d %d %d\n", 
-// 	config.text[i], 
+// 	xchar[i], 
 // 	char_positions[i].x, 
 // 	char_positions[i].y, 
 // 	char_positions[i].w);
 		current_w += char_positions[i].w;
 
-		if(config.text[i] == 0xa || i == text_len - 1)
+		if(xchar[i] == 0xa || i == text_len - 1)
 		{
 			text_rows++;
 			rows_bottom[text_rows] = 0;
@@ -1632,7 +1708,7 @@ void TitleMain::get_total_extents()
 	row_start = 0;
 	for(int i = 0; i < text_len; i++)
 	{
-		if(config.text[i] == 0xa || i == text_len - 1)
+		if(xchar[i] == 0xa || i == text_len - 1)
 		{
 			for(int j = row_start; j <= i; j++)
 			{

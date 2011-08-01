@@ -63,8 +63,8 @@ VFrame* BC_Resources::type_to_icon[] =
 
 char* BC_Resources::small_font = N_("-*-helvetica-medium-r-normal-*-10-*");
 char* BC_Resources::small_font2 = N_("-*-helvetica-medium-r-normal-*-11-*");
-char* BC_Resources::medium_font = N_("-*-helvetica-bold-r-normal-*-14-*");
-char* BC_Resources::medium_font2 = N_("-*-helvetica-bold-r-normal-*-14-*");
+char* BC_Resources::medium_font = N_("-*-helvetica-bold-r-normal-*-12-*");
+char* BC_Resources::medium_font2 = N_("-*-helvetica-bold-r-normal-*-12-*");
 char* BC_Resources::large_font = N_("-*-helvetica-bold-r-normal-*-18-*");
 char* BC_Resources::large_font2 = N_("-*-helvetica-bold-r-normal-*-20-*");
 
@@ -72,12 +72,12 @@ char* BC_Resources::small_fontset = "6x12,*";
 char* BC_Resources::medium_fontset = "7x14,*";
 char* BC_Resources::large_fontset = "8x16,*";
 
-char* BC_Resources::small_font_xft = N_("-*-luxi sans-*-r-*-*-12-*-*-*-*-*-*-*");
-char* BC_Resources::small_font_xft2 = N_("-microsoft-verdana-*-*-*-*-*-*-*-*-*-*-*-*");
-char* BC_Resources::medium_font_xft = N_("-*-luxi sans-*-r-*-*-16-*-*-*-*-*-*-*");
-char* BC_Resources::medium_font_xft2 = N_("-microsoft-verdana-*-*-*-*-*-*-*-*-*-*-*-*");
-char* BC_Resources::large_font_xft = N_("-*-luxi sans-bold-r-*-*-20-*-*-*-*-*-*-*");
-char* BC_Resources::large_font_xft2 = N_("-microsoft-verdana-*-*-*-*-*-*-*-*-*-*-*-*");
+char* BC_Resources::small_font_xft = N_("Sans-8");
+char* BC_Resources::small_font_xft2 = N_("-verdana-*-*-*-*-*-*-*-*-*-*-*-*");
+char* BC_Resources::medium_font_xft = N_("Sans-10");
+char* BC_Resources::medium_font_xft2 = N_("-verdana-*-*-*-*-*-*-*-*-*-*-*-*");
+char* BC_Resources::large_font_xft = N_("Sans-12");
+char* BC_Resources::large_font_xft2 = N_("-verdana-*-*-*-*-*-*-*-*-*-*-*-*");
 
 suffix_to_type_t BC_Resources::suffix_to_type[] = 
 {
@@ -87,7 +87,17 @@ suffix_to_type_t BC_Resources::suffix_to_type[] =
 	{ "mp3", ICON_SOUND },
 	{ "mpg", ICON_FILM },
 	{ "vob", ICON_FILM },
-	{ "wav", ICON_SOUND }
+	{ "wav", ICON_SOUND },
+	{ "wma", ICON_SOUND },
+	{ "ogg", ICON_SOUND },
+	{ "avi", ICON_FILM },
+	{ "wmv", ICON_FILM },
+	{ "ogm", ICON_FILM },
+	{ "ogv", ICON_FILM },
+	{ "mkv", ICON_FILM },
+	{ "asf", ICON_FILM },
+	{ "mp4", ICON_FILM },
+	{ "flv", ICON_FILM }
 };
 
 BC_Signals* BC_Resources::signal_handler = 0;
@@ -106,9 +116,11 @@ int BC_Resources::x_error_handler(Display *display, XErrorEvent *event)
 
 	BC_Resources::error = 1;
 // This bug only happens in 32 bit mode.
-	if(sizeof(long) == 4)
-		BC_WindowBase::get_resources()->use_xft = 0;
-	return 0;
+//	if(sizeof(long) == 4)
+//		BC_WindowBase::get_resources()->use_xft = 0;
+//	return 0;
+	// if guicast routine crashes xft this unlock subwindow
+	XftInitFtLibrary();
 }
 
 
