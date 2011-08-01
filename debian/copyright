@@ -1,10 +1,35 @@
-This package was debianized by Sylvain Joyeux <sylvain.joyeux@m4x.org>
-Mon, 21 Oct 2002 03:15:48 +0200.
+This is Debian GNU/Linux's prepackaged version of Cinelerra-CV, a nonlinear video
+editor. Cinelerra-CV is the community version of Cinilerra, which was originally written 
+by Heroine Warrior. 
 
-It was downloaded from http://heroinewarrior.com
+Cinelerra-CV is maintained through a community effort: http://cinelerra.org.
 
-Copyright: GNU Public License 2
+This package was put together by Nicola Ferralis <feranick@hotmail.com>
+from sources obtained from:
+git://git.cinelerra.org/j6t/cinelerra.git
 
-On Debian GNU/Linux systems, the complete text of the GNU General Public
-License may be found in `/usr/share/common-licenses/GPL'.
+The package is now maintained by Nicola Ferralis <feranick@hotmail.com>.
 
+Copyright (c) 1996-2010 Heroine Warrior and Cinelerra community
+
+Maintained by the Cinelerra-CV community.
+
+
+                             All Rights Reserved
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
+
+On Debian GNU/Linux systems, the complete text of the GNU General
+Public License can be found in `/usr/share/common-licenses/GPL'.

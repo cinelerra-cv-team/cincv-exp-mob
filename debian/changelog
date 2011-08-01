@@ -1,3 +1,83 @@
+cinelerra (1:2.1.5-0.16~ppa1~natty5) natty; urgency=low
+
+  * New patch (general for all kernels) to support video4Linux v1:
+    - keeps v4l support as always for people using kernel <= 2.6.37.
+    - keeps v4l support for people using kernel >= 2.6.38.
+    - cinelerra compiles fine with and without libv4l.
+    - adds videodev.h to local tree.
+    - add LD_PRELOAD=/usr/lib/libv4l/v4l1compat.so for correct initialization.
+    - Thanks to Rafael Diniz.
+
+ -- Nicola Ferralis <feranick@hotmail.com>  Mon, 30 May 2011 13:21:15 -0400
+
+cinelerra (1:2.1.5-0.16~ppa1~natty3) natty; urgency=low
+
+  * New patch re-enables support for video4linux v.1 through libv4l.
+
+ -- Nicola Ferralis <feranick@hotmail.com>  Sat, 28 May 2011 20:17:58 -0400
+
+cinelerra (1:2.1.5-0.16~ppa1~natty2) natty; urgency=low
+
+  * Added missing dependency to mjpegtools.
+
+ -- Nicola Ferralis <feranick@hotmail.com>  Sat, 07 May 2011 00:02:25 -0400
+
+cinelerra (1:2.1.5-0.15~ppa2~natty2) natty; urgency=low
+
+  * Fixed name in desktop launcher (for correct localization).
+  * To allow compilation on kernel 2.6.38, support is removed for:
+    - video4linux v.1 (through videodev.h)
+    - iOmega Buzz.
+
+ -- Nicola Ferralis <feranick@hotmail.com>  Thu, 06 May 2011 12:39:58 -0400
+
+cinelerra (1:2.1.5-0.14~ppa1~maverick2) maverick; urgency=low
+
+  * Added postrm script, for graceful uninstallation.
+
+ -- Nicola Ferralis <feranick@hotmail.com>  Sat, 01 Jan 2011 09:39:13 -0800
+
+cinelerra (1:2.1.5-0.13~ppa1~maverick1) maverick; urgency=low
+
+  * Update postinst script, to add shmmax requirements. 
+
+ -- Nicola Ferralis <feranick@hotmail.com>  Fri, 31 Dec 2010 12:07:40 -0800
+
+cinelerra (1:2.1.5-0.12~ppa1~maverick1) maverick; urgency=low
+
+  * Revised config options:
+    - added -pipe.
+    - added -without-pic to architectures other than amd64.
+
+ -- Nicola Ferralis <feranick@hotmail.com>  Fri, 10 Dec 2010 23:19:56 -0800
+
+cinelerra (1:2.1.5-0.11~ppa2~maverick1) maverick; urgency=low
+
+  * Fixed Copyright notice.
+
+ -- Nicola Ferralis <feranick@hotmail.com>  Fri, 10 Dec 2010 11:37:14 -0800
+
+cinelerra (1:2.1.5-0.10~ppa1~maverick1) maverick; urgency=low
+
+  * Fixed lintian errors and warnings:
+    - Update-menu postinstallation.
+    - Fix category for menu entry.
+    - Updated copyright notice.
+
+ -- Nicola Ferralis <feranick@hotmail.com>  Wed, 08 Dec 2010 14:29:16 -0800
+
+cinelerra (1:2.1.5-0.9~ppa1~maverick1) maverick; urgency=low
+
+  * New upstream release from git (2.1.5CV).
+  * Experimental Debian package: use with caution.
+  * Changed Debian folder:
+    - Removed the old (and severely outdated) debian folder
+    - New Debian folder (source format 3)
+    - Updated Debian Standards-Version to 3.9.1.
+  * Backported to Maverick.
+
+ -- Nicola Ferralis <feranick@hotmail.com>  Wed, 28 Nov 2010 14:18:19 -0800
+
 hvirtual (1:2.1.0-1svn20060912) unstable; urgency=low
 
   * SVN of 2006-09-12, non-debug build, merge with Adam's 2.1 version
