@@ -23,7 +23,7 @@ build-stamp:
 	dh_testdir
 	@if [ ! -e configure ] ; then ./autogen.sh; fi
 	CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" \
-		./configure --enable-opengl --prefix=/usr $(CONFFLAGS) 
+		./configure --prefix=/usr $(CONFFLAGS) 
 	$(MAKE) $(MAKEFLAGS)
 	docbook-to-man debian/cinelerra.sgml > debian/cinelerra.1
 	docbook-to-man debian/mplexhi.sgml > debian/mplexhi.1
