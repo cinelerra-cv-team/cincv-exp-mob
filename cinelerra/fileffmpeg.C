@@ -22,8 +22,8 @@
 #include "asset.h" 
 extern "C" 
 {
-#include <libavcodec/avcodec.h>
-#include <libavformat/avformat.h>
+#include "libavcodec/avcodec.h"
+#include "libavformat/avformat.h"
 }
 #include "bcsignals.h"
 #include "clip.h"
@@ -221,95 +221,104 @@ if(debug) printf("FileFFMPEG::open_file %d result=%d\n", __LINE__, result);
 		else
 		{
 			ffmpeg_lock->unlock();
-printf("FileFFMPEG::open_file %d\n", __LINE__);
+if(debug) printf("FileFFMPEG::open_file %d\n", __LINE__);
 			return 1;
 		}
 if(debug) printf("FileFFMPEG::open_file %d result=%d\n", __LINE__, result);
 
-
-		result = 0;
-		asset->format = FILE_FFMPEG;
-		for(int i = 0; i < ((AVFormatContext*)ffmpeg_file_context)->nb_streams; i++)
+// Convert format to asset
+		if(result >= 0)
 		{
-			AVStream *stream = ((AVFormatContext*)ffmpeg_file_context)->streams[i];
-      			AVCodecContext *decoder_context = stream->codec;
-      		switch(decoder_context->codec_type) 
+			result = 0;
+			asset->format = FILE_FFMPEG;
+			for(int i = 0; i < ((AVFormatContext*)ffmpeg_file_context)->nb_streams; i++)
 			{
-      			case CODEC_TYPE_AUDIO:
+				AVStream *stream = ((AVFormatContext*)ffmpeg_file_context)->streams[i];
+       			AVCodecContext *decoder_context = stream->codec;
+        		switch(decoder_context->codec_type) 
+				{
+        			case CODEC_TYPE_AUDIO:
 if(debug) printf("FileFFMPEG::open_file %d i=%d audio_index=%d\n", __LINE__, i, audio_index);
-      			if(audio_index < 0)
-					{
-						audio_index = i;
-						asset->audio_data = 1;
-						asset->channels = decoder_context->channels;
-						asset->sample_rate = decoder_context->sample_rate;
-						asset->audio_length = (int64_t)(((AVFormatContext*)ffmpeg_file_context)->duration * 
-							asset->sample_rate / 
-							AV_TIME_BASE);
-						asset->bits = 16;
+            			if(audio_index < 0)
+						{
+							audio_index = i;
+							asset->audio_data = 1;
+							asset->channels = decoder_context->channels;
+							asset->sample_rate = decoder_context->sample_rate;
+							asset->audio_length = (int64_t)(((AVFormatContext*)ffmpeg_file_context)->duration * 
+								asset->sample_rate / 
+								AV_TIME_BASE);
+							asset->bits = 16;
 if(debug) printf("FileFFMPEG::open_file %d decoder_context->codec_id=%d\n", __LINE__, decoder_context->codec_id);
-						AVCodec *codec = avcodec_find_decoder(decoder_context->codec_id);
-						if(!codec)
-						{
-							printf("FileFFMPEG::open_file: audio codec 0x%x not found.\n", 
-								decoder_context->codec_id);
-							asset->audio_data = 0;
-							audio_index = -1;
+							AVCodec *codec = avcodec_find_decoder(decoder_context->codec_id);
+							if(!codec)
+							{
+								printf("FileFFMPEG::open_file: audio codec 0x%x not found.\n", 
+									decoder_context->codec_id);
+								asset->audio_data = 0;
+								audio_index = -1;
+							}
+							else
+							{
+								avcodec_thread_init(decoder_context, file->cpus);
+								avcodec_open(decoder_context, codec);
+							}
 						}
-						else
-						{
-							avcodec_thread_init(decoder_context, file->cpus);
-							avcodec_open(decoder_context, codec);
-						}
-					}
-      			break;
+            			break;
 
-      			case CODEC_TYPE_VIDEO:
+        			case CODEC_TYPE_VIDEO:
 if(debug) printf("FileFFMPEG::open_file %d i=%d video_index=%d\n", __LINE__, i, video_index);
-      			if(video_index < 0)
-					{
-						video_index = i;
-						asset->video_data = 1;
-						asset->layers = 1;
-						asset->width = decoder_context->width;
-						asset->height = decoder_context->height;
-						if(EQUIV(asset->frame_rate, 0))
-							asset->frame_rate = 
-								(double)stream->r_frame_rate.num /
-								stream->r_frame_rate.den;
+            			if(video_index < 0)
+						{
+							video_index = i;
+							asset->video_data = 1;
+							asset->layers = 1;
+							asset->width = decoder_context->width;
+							asset->height = decoder_context->height;
+							if(EQUIV(asset->frame_rate, 0))
+								asset->frame_rate = 
+									(double)stream->r_frame_rate.num /
+									stream->r_frame_rate.den;
 // 								(double)decoder_context->time_base.den / 
 // 								decoder_context->time_base.num;
-						asset->video_length = (int64_t)(((AVFormatContext*)ffmpeg_file_context)->duration *
-							asset->frame_rate / 
-							AV_TIME_BASE);
-						asset->aspect_ratio = 
-							(double)decoder_context->sample_aspect_ratio.num / 
-							decoder_context->sample_aspect_ratio.den;
+							asset->video_length = (int64_t)(((AVFormatContext*)ffmpeg_file_context)->duration *
+								asset->frame_rate / 
+								AV_TIME_BASE);
+							asset->aspect_ratio = 
+								(double)decoder_context->sample_aspect_ratio.num / 
+								decoder_context->sample_aspect_ratio.den;
 if(debug) printf("FileFFMPEG::open_file %d decoder_context->codec_id=%d\n", 
 __LINE__, 
 decoder_context->codec_id);
-						AVCodec *codec = avcodec_find_decoder(decoder_context->codec_id);
-						avcodec_thread_init(decoder_context, file->cpus);
-						avcodec_open(decoder_context, codec);
-					}
-      			break;
+							AVCodec *codec = avcodec_find_decoder(decoder_context->codec_id);
+							avcodec_thread_init(decoder_context, file->cpus);
+							avcodec_open(decoder_context, codec);
+						}
+            			break;
 
-      			default:
-      			break;
-      		}
+        			default:
+            			break;
+        		}
+			}
+
+			if(debug) 
+			{
+				printf("FileFFMPEG::open_file %d audio_index=%d video_index=%d\n",
+					__LINE__,
+					audio_index,
+					video_index);
+				asset->dump();
+			}
 		}
-
-		if(debug) 
+		else
 		{
-			printf("FileFFMPEG::open_file %d audio_index=%d video_index=%d\n",
-				__LINE__,
-				audio_index,
-				video_index);
-			asset->dump();
+			ffmpeg_lock->unlock();
+if(debug) printf("FileFFMPEG::open_file %d\n", __LINE__);
+			return 1;
 		}
 	}
 
-printf("FileFFMPEG::open_file result=%d\n", result);
+if(debug) printf("FileFFMPEG::open_file result=%d\n", result);
 	ffmpeg_lock->unlock();
 	return result;
 }
@@ -422,7 +431,14 @@ int FileFFMPEG::read_frame(VFrame *frame)
 	AVStream *stream = ((AVFormatContext*)ffmpeg_file_context)->streams[video_index];
 	AVCodecContext *decoder_context = stream->codec;
 
-//printf("FileFFMPEG::read_frame\n");
+
+// if(file->current_frame == 100) 
+// {
+// printf("FileFFMPEG::read_frame %d fake crash\n", __LINE__);
+// 	exit(1);
+// }
+
+
 //dump_context(stream->codec);
 	if(first_frame)
 	{
@@ -461,6 +477,10 @@ int FileFFMPEG::read_frame(VFrame *frame)
 
 #define SEEK_THRESHOLD 16
 
+// printf("FileFFMPEG::read_frame %d current_frame=%lld file->current_frame=%lld\n", 
+// __LINE__, 
+// current_frame,
+// file->current_frame);
 	if(current_frame != file->current_frame &&
 		(file->current_frame < current_frame ||
 		file->current_frame > current_frame + SEEK_THRESHOLD))
@@ -484,7 +504,6 @@ int FileFFMPEG::read_frame(VFrame *frame)
 		current_frame = file->current_frame - 1;
 	}
 
-//sleep(1);
 	int got_it = 0;
 // Read frames until we catch up to the current position.
 // 	if(current_frame >= file->current_frame - SEEK_THRESHOLD &&
@@ -545,7 +564,7 @@ int FileFFMPEG::read_frame(VFrame *frame)
 						packet.size);
 //printf("FileFFMPEG::read_frame %d result=%d\n", __LINE__, result);
 					if(((AVFrame*)ffmpeg_frame)->data[0] && got_picture) got_it = 1;
-//printf("FileFFMPEG::read_frame result=%d got_it=%d\n", result, got_it);
+//printf("FileFFMPEG::read_frame %d result=%d got_it=%d\n", __LINE__, result, got_it);
 				}
 			}
 		}
@@ -553,6 +572,11 @@ int FileFFMPEG::read_frame(VFrame *frame)
 		if(got_it) current_frame++;
 	}
 //PRINT_TRACE
+// printf("FileFFMPEG::read_frame %d current_frame=%lld file->current_frame=%lld got_it=%d\n", 
+// __LINE__, 
+// current_frame,
+// file->current_frame,
+// got_it);
 
 // Convert colormodel
 	if(got_it)
@@ -641,6 +665,7 @@ int FileFFMPEG::read_samples(double *buffer, int64_t len)
 // decode_start,
 // decode_end);
 
+if(debug) PRINT_TRACE
 // Seek occurred
 	if(decode_start != decode_end)
 	{
@@ -658,7 +683,7 @@ int FileFFMPEG::read_samples(double *buffer, int64_t len)
 		decode_end = decode_start;
 	}
 
-//PRINT_TRACE
+if(debug) PRINT_TRACE
 	int got_it = 0;
 	int accumulation = 0;
 // Read frames until the requested range is decoded.
@@ -733,7 +758,7 @@ if(debug) PRINT_TRACE
 		file->current_channel,
 		len);
 
-if(debug) PRINT_TRACE
+if(debug) printf("FileFFMPEG::read_samples %d %d\n", __LINE__, error);
 	current_sample += len;
 	ffmpeg_lock->unlock();
 	return error;
