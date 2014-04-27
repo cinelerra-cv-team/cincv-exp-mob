@@ -355,7 +355,7 @@ void Record::source_to_text(char *string, Batch *batch)
 			if(batch->channel < 0 || batch->channel >= channeldb->size())
 				sprintf(string, _("None"));
 			else
-				sprintf(string, channeldb->get(batch->channel)->title);
+				sprintf(string, "%s", channeldb->get(batch->channel)->title);
 			break;
 	}
 }
