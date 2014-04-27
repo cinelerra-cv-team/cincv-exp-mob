@@ -18,3 +18,9 @@ Makefile.in
 /stamp-h1
 cinelerra-cvs-current.spec
 *.data
+*.deps
+*.libs
+*.o
+*.lo
+*.la
+lib*.a
