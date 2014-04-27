@@ -1,3 +1,17 @@
+hvirtual (1:2.1.0-1git20140427) UNRELEASED; urgency=low
+
+  [ Petter Reinholdtsen ]
+  * Move to debhelper compat level 9.
+  * Update maintainer contact address to the new mailing list on
+    lists.cinelerra-cv.org.
+  * Update copyright file based on packages available from Cinelerra PPA
+    by Nicola Ferralis.
+  * Add homepage URL to cinelerra-cv.org.
+  * Update build dependencies to use the packages currently available in
+    Debian and Ubuntu.
+
+ -- Petter Reinholdtsen <pere@debian.org>  Sun, 27 Apr 2014 21:57:48 +0200
+
 hvirtual (1:2.1.0-1svn20060912) unstable; urgency=low
 
   * SVN of 2006-09-12, non-debug build, merge with Adam's 2.1 version
