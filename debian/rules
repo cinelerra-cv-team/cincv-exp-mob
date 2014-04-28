@@ -91,9 +91,11 @@ binary-arch: build install
 binary: binary-indep binary-arch
 
 get-upstream-source:
-	git clone git://git.cinelerra-cv.org/CinelerraCV.git cinelerra-cv
-	date=$$(date +%Y%m%d); \
+	set -e; branch=pere; \
+	  date=$$(date +%Y%m%d); \
 	  packagever=cinelerra-cv-2.2; \
-	  tag=$$(cd cinelerra-cv; git rev-list master -n 1 | cut -c 1-7); \
-	  (cd cinelerra-cv; git archive HEAD --prefix=$$packagever/) | bzip2 > ../cinelerra-cv_2.2.git.$${date}.$${tag}.orig.tar.bz2
-	rm -rf cinelerra-cv
+	  git clone -b $${branch} git://git.cinelerra-cv.org/mob/cinelerra.git $${packagever}; \
+	  tag=$$(cd $${packagever}; git rev-list $${branch} -n 1 | cut -c 1-7); \
+	  (cd $${packagever}; git archive HEAD --prefix=$$packagever/) | bzip2 > ../cinelerra-cv_2.2.git.$${date}.$${tag}.orig.tar.bz2; \
+	  echo "created ../cinelerra-cv_2.2.git.$${date}.$${tag}.orig.tar.bz2"; \
+	  rm -rf $${packagever}
