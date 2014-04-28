@@ -1,0 +1,44 @@
+#! /bin/sh
+set -e
+
+#DEBHELPER#
+# Define
+IC=cinestart
+SCRIPT=/etc/init.d/$IC
+STARTCINELERRA=/usr/bin/cinelerra-cv
+MAPP=/var/lib/locales/supported.d
+
+# remove prev script settings
+if ls $MAPP | grep cinelerra
+then
+rm $MAPP/*cinelerra
+/usr/sbin/locale-gen --purge
+fi
+
+if [ "$1" = "remove" ] ; then
+if /usr/bin/lsb_release -d | grep buntu
+then
+for i in de_DE es_ES fr_FR it_IT pt_BR sl_SI eu_ES eu_FR
+do
+if localedef --list-archive | grep $i | grep iso885915
+then
+localedef --delete-from-archive $i.iso885915
+fi
+done
+# this remove iso-8859-15 to your lang ( usefull to build new lang )
+i=$(echo $LANG | sed -e s/\.UTF-8//g)
+if ! localedef --list-archive | grep $i | grep iso885915
+then localedef --delete-from-archive $i.ISO-8859-15 &> /dev/null
+fi
+localedef --delete-from-archive ru_RU.KOI8-R &> /dev/null
+rm $STARTCINELERRA
+/usr/sbin/update-rc.d -f $IC remove
+rm $SCRIPT
+
+fi
+
+fi
+
+exit 0
+
+
