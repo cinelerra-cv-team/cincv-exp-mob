@@ -22,9 +22,9 @@ ifneq (, $(findstring smp2,$(DEB_BUILD_OPTIONS)))
 endif
 
 # Enable this to activate hardening, when the source is fixed
-#CFLAGS += $(shell dpkg-buildflags --get CFLAGS)
-#CXXFLAGS += $(shell dpkg-buildflags --get CXXFLAGS)
-#LDFLAGS += $(shell dpkg-buildflags --get LDFLAGS)
+CFLAGS += $(shell dpkg-buildflags --get CFLAGS)
+CXXFLAGS += $(shell dpkg-buildflags --get CXXFLAGS)
+LDFLAGS += $(shell dpkg-buildflags --get LDFLAGS)
 
 build: build-stamp
 build-stamp:
