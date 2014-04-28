@@ -28,9 +28,9 @@ done
 # this remove iso-8859-15 to your lang ( usefull to build new lang )
 i=$(echo $LANG | sed -e s/\.UTF-8//g)
 if ! localedef --list-archive | grep $i | grep iso885915
-then localedef --delete-from-archive $i.ISO-8859-15 &> /dev/null
+then localedef --delete-from-archive $i.ISO-8859-15 > /dev/null 2>&1
 fi
-localedef --delete-from-archive ru_RU.KOI8-R &> /dev/null
+localedef --delete-from-archive ru_RU.KOI8-R > /dev/null 2>&1
 rm $STARTCINELERRA
 /usr/sbin/update-rc.d -f $IC remove
 rm $SCRIPT
@@ -40,5 +40,3 @@ fi
 fi
 
 exit 0
-
-
