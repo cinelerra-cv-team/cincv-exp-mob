@@ -322,7 +322,7 @@ void FormatTools::update_extension()
 			*ptr = '.';
 		}
 		ptr++;
-		sprintf(ptr, "%s", extension);
+		strcpy(ptr, extension);
 
 		int character1 = ptr - asset->path;
 		int character2 = ptr - asset->path + strlen(extension);
