@@ -37,7 +37,7 @@ Architecture: any
 Depends: ${shlibs:Depends}
 Description: A toolkit library
  libguicast is a toolkit library mainly used by HeroineVirtual's
- softwares
+ software.
 
 Package: libquicktimehv
 Section: libs
