@@ -54,7 +54,7 @@ Description: Quicktime 4 Linux Cinelerra internal library
  .
  Users wishing for a consumer library should use OpenQuicktime or FFMPEG.
  .
- For more informations, see http://heroinewarrior.com/quicktime.php3
+ For more information, see http://heroinewarrior.com/quicktime.php3
 
 Package: libquicktimehv-dev
 Section: libs
@@ -73,7 +73,7 @@ Description: Quicktime 4 Linux (Cinelerra internal) library (development files)
  .
  This package holds development files for the Quicktime 4 Linux library
  .
- For more informations, see http://heroinewarrior.com/quicktime.php3
+ For more information, see http://heroinewarrior.com/quicktime.php3
 
 Package: libmpeg3hv
 Section: libs
@@ -87,7 +87,7 @@ Description: advanced editing and manipulation of MPEG streams (cinelerra's inte
  Unless you have a need for MPEG editing and copying, you're better 
  off using a consumer library like FFMPEG.
  .
- For more informations, see http://heroinewarrior.com/quicktime.php3
+ For more information, see http://heroinewarrior.com/quicktime.php3
 
 Package: libmpeg3hv-dev
 Section: libs
@@ -103,5 +103,5 @@ Description: advanced editing and manipulation of MPEG streams (development file
  .
  This package holds development files for the libmpeg3 library
  .
- For more informations, see http://heroinewarrior.com/quicktime.php3
+ For more information, see http://heroinewarrior.com/quicktime.php3
 
