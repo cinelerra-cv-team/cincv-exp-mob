@@ -60,6 +60,8 @@ install: build
 	# .la files are not used in Debian, remove them
 	find debian/tmp -name '*.la'|xargs rm
 
+	cp debian/cinelerra-cv.sysctl.d debian/cinelerra-cv/etc/sysctl.d/cinelerra-cv.conf
+
 	chmod -x debian/tmp/usr/lib/cinelerra/*
 	chmod +x debian/tmp/usr/lib/cinelerra/fonts
 	chmod -x debian/tmp/usr/lib/cinelerra/fonts/*
@@ -75,7 +77,7 @@ binary-arch: build install
 	dh_installdocs -XCVS
 	dh_installchangelogs -a
 	dh_installman
-	dh_installmenu -n
+	dh_installmenu
 	dh_link -a
 	dh_icons -a
 	dh_strip -a
